@@ -28,8 +28,9 @@
 
 #Selecionando apenas as sete variáveis principais, já convertendo para números
   carreira <- carreira %>%
-    select(id, Sexo, 
-           AEO01:EEC09)
-  
+    select(id, Sexo, AEO01:EEC09)
+  #Alterando o tipo de AEO01:EEC09
+  carreira <- lapply(carreira[, 3:63], as.numeric)
+
 #Análises descritivas iniciais
   skim(carreira)
