@@ -3,7 +3,7 @@
  library(lavaan)
  library(semPlot)
 
-#Exploratory.R:
+#Cleaning Dataset.R:
 #Abrindo a biblioteca
   library(haven)
   library(psych)
