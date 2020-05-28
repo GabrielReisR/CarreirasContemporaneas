@@ -1,11 +1,10 @@
 library(igraph)
 library(psych)
 library(qgraph)
-library(readr)
 library(tidyverse)
 
 #Banco de dados
-    network <- read_csv("network_carreira.csv")
+    network <- read.csv("network_carreira.csv", sep = ",")
     #Excluindo id e ACP
     network <- network %>% select(-X1, -ACP)
 #Criando rede

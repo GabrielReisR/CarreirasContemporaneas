@@ -6,8 +6,10 @@
  library(tidyverse)
 
 #Banco de dados
-carreira <- read_csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasContemporaneas/master/Bancos/carreira.csv")
-
+  carreira <- read.csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasContemporaneas/master/Bancos/carreira.csv", sep = ",")
+  #Excluindo X
+  carreira <- carreira[, -1]
+  View(carreira) #tudo ok!
 #Análises Fatoriais Confirmatórias
 #AEO = Autoeficácia Ocupacional
   model_AEO <- ' AEO =~ AEO01 + AEO02 + AEO03 + AEO04 + AEO05 + AEO06 '
@@ -34,6 +36,18 @@ carreira <- read_csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasCo
   #RMSEA = .106 (entre .089 e .124)
   #SRMR = .082
 
+  #modelo geral da ACSF
+  model_ACSF_geral <- ' 
+  ACSF =~ ACSF05 + ACSF06 + ACSF03 + ACSF04 + ACSF07 + ACSF08 + ACSF12 + ACSF13 + ACSF11 + ACSF10
+  '
+  fit_ACSF_geral <- cfa(model = model_ACSF_geral, data = carreira, 
+                        ordered = TRUE, estimator = "WLSMV")
+  summary(fit_ACSF_geral, fit.measures = TRUE, standardized = TRUE)
+  ACSF_loadings_geral <- inspect(fit_ACSF_geral, what = "std")[["lambda"]]
+  #Factor loadings entre .444 e .707
+  #CFI = .520, TLI = .383
+  #RMSEA = .273 (entre .257 e .290)
+  #SRMR = .222
 #ACP  = Atitude de Carreira Proteana
   model_ACP <- '
   AG =~ ACP05 + ACP03 + ACP06 + ACP04 + ACP02 + ACP07
@@ -45,7 +59,6 @@ carreira <- read_csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasCo
                  ordered = TRUE, estimator = "WLSMV")
   summary(fit_ACP, fit.measures = TRUE, standardized = TRUE, modindices = TRUE)
   ACP_loadings <- inspect(fit_ACP, what = "std")[["lambda"]]
-  ACP_loadings
   #Factor loadings entre .465 e .839
   #CFI = .933, TLI = .909
   #RMSEA = 0.098 (entre .080 e .116)
@@ -70,7 +83,7 @@ carreira <- read_csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasCo
 #PPC  = Escala de Parâmetros de Carreira Caleidoscópica
   model_PPC <- '
   AUTEN =~ PPC01 + PPC02 + PPC05 + PPC07 + PPC10 + PPC17 + PPC19
-  BALAN =~ PPC04 + PPC08 + PPC06 + PPC11 + PPC15 + PPC18
+  BALAN =~ PPC04 + PPC06 + PPC08 + PPC11 + PPC15 + PPC18
   CRESC =~ PPC03 + PPC09 + PPC14 + PPC12 + PPC13
   PPC14 ~~ PPC12
   '
@@ -102,6 +115,9 @@ carreira <- read_csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasCo
   #ACSF
     ACSF_predict <- predict(fit_ACSF)
     carreira <- cbind(carreira, ACSF_predict)
+  #ACSF_geral
+    ACSF_geral_predict <- predict(fit_ACSF_geral)
+    carreira <- cbind(carreira, ACSF_geral_predict)
   #ACP
     ACP_predict <- predict(fit_ACP)
     carreira <- cbind(carreira, ACP_predict)
@@ -114,9 +130,50 @@ carreira <- read_csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasCo
   #EEC
     EEC_predict <- predict(fit_EEC)
     carreira <- cbind(carreira, EEC_predict)
-  
-#Novo banco com todas alterações anteriores
-  write.csv(carreira, "carreira_fatoriais.csv") 
 
-#Novo banco apenas para a análise de redes
+#Criando escores das médias e DPs para análises descritivas
+  #AEO
+  carreira <- carreira %>% rowwise() 
+    %>% mutate(AEO_total = mean(AEO01:AEO06, na.rm = T))
+  #ACSF
+  carreira <- carreira %>% rowwise() 
+    %>% mutate(ACSF_total = mean(c(ACSF03:ACSF08, ACSF10:ACSF13), na.rm = T))
+  #ACSF_MP
+  carreira <- carreira %>% rowwise() %>%
+    mutate(ACSF_MP = mean(c(ACSF03:ACSF08), na.rm = T))
+  #ACSF_MF
+  carreira <- carreira %>% rowwise() %>%
+    mutate(ACSF_MF = mean(c(ACSF10:ACSF13), na.rm = T))
+  #ACP
+  carreira <- carreira %>% rowwise() %>%
+    mutate(ACP_total = mean(c(ACP02:ACP13), na.rm = T))
+  #ACP_AG
+  carreira <- carreira %>% rowwise() %>%
+    mutate(ACP_AG = mean(c(ACP02:ACP07), na.rm = T))
+  #ACP_DV
+  carreira <- carreira %>% rowwise() %>%
+    mutate(ACP_DV = mean(c(ACP09, ACP11, ACP12, ACP14), na.rm = T))
+  #PPC
+  carreira <- carreira %>% rowwise() %>%
+    mutate(PPC_total = mean(c(PPC01:PPC15, PPC17:PPC19), na.rm = T))
+  #AUTEN
+  carreira <- carreira %>% rowwise() %>%
+    mutate(PPC_AUTEN = mean(c(PPC01, PPC02, PPC05, PPC07, PPC10, PPC17, PPC19), na.rm = T))
+  #BALAN
+  carreira <- carreira %>% rowwise() %>%
+    mutate(PPC_BALAN = mean(c(PPC04, PPC06, PPC08, PPC11, PPC15, PPC18), na.rm = T))
+  #CRESC
+  carreira <- carreira %>% rowwise() %>%
+    mutate(PPC_CRESC = mean(c(PPC03, PPC09, PPC12:PPC14), na.rm = T))
+  #EEC
+ carreira <- carreira %>% rowwise() %>%
+  mutate(EEC_total = mean(c(EEC01:EEC09), na.rm = T))
+#Uma olhada em como o banco está
+glimpse(carreira) #tudo ok
+
+#Novo banco com todas alterações anteriores
+  write.csv(carreira, "carreira fatoriais.csv")
+
+#Novo banco apenas para a análise de redes - escores z
   network <- carreira %>% select(AEO:EEC)
+  write.csv(network, "network analysis.csv")
