@@ -177,3 +177,9 @@ glimpse(carreira) #tudo ok
 #Novo banco apenas para a análise de redes - escores z
   network <- carreira %>% select(AEO:EEC)
   write.csv(network, "network analysis.csv")
+  #análise específica dos fatores de ACSF e ACP
+  networkEspec <- network %>% select(-ACSF, -ACP)
+  write.csv(networkEspec, "network analysis - especifico.csv")
+  #análise generalista dos fatores de ACSF e ACP
+  networkGeral <- network %>% select(-MP, -MF, -AG, -DV)
+  write.csv(networkGeral, "network analysis - geral.csv")
