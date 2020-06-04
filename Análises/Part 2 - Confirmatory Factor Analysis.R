@@ -133,11 +133,11 @@
 
 #Criando escores das médias e DPs para análises descritivas
   #AEO
-  carreira <- carreira %>% rowwise() 
-    %>% mutate(AEO_total = mean(AEO01:AEO06, na.rm = T))
+  carreira <- carreira %>% rowwise() %>% 
+    mutate(AEO_total = mean(AEO01:AEO06, na.rm = T))
   #ACSF
-  carreira <- carreira %>% rowwise() 
-    %>% mutate(ACSF_total = mean(c(ACSF03:ACSF08, ACSF10:ACSF13), na.rm = T))
+  carreira <- carreira %>% rowwise() %>% 
+    mutate(ACSF_total = mean(c(ACSF03:ACSF08, ACSF10:ACSF13), na.rm = T))
   #ACSF_MP
   carreira <- carreira %>% rowwise() %>%
     mutate(ACSF_MP = mean(c(ACSF03:ACSF08), na.rm = T))

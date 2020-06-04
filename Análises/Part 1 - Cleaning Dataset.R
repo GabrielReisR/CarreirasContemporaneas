@@ -5,7 +5,7 @@
   library(tidyverse)
 
 #Entendendo o banco de dados
-  banco_inicial <- read_csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasContemporaneas/master/Bancos/bancosintegrados.csv")
+  banco_inicial <- read.csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasContemporaneas/master/Bancos/bancosintegrados.csv", sep = ",")
   View(banco_inicial) #visualização do banco
 
   #Nome das variáveis
@@ -38,4 +38,8 @@
   skim(banco_inicial) #tudo ok!
 
 #Novo banco limpo - prosseguir para análises de carreira
-write.csv(banco_inicial, "carreira.csv")
+ write.csv(banco_inicial, "carreira.csv")
+
+
+# Após colocar no Git...
+

@@ -59,8 +59,13 @@
      sdsGeral <- sqrt(diag(networkCorGeral))
      networkMatrixGeral <- cor2cov(networkCorGeral, sdsGeral) # objeto final
 
-    networkGraphGeral <- qgraph(networkMatrixGeral, directed = FALSE, layout = "spring", 
-                           graph = "glasso", sampleSize = 300)
+   # grupos
+   grupos <- list("Autoeficácia Ocupacional" = c(1), "Carreira Sem-Fronteiras" = c(2),
+                  "Carreira Proteana" = c(3), "Autenticidade" = c(4), "Balanço" = c(5),
+                  "Crescimento" = c(6), "Engajamento na Carreira" = c(7))
+   names(networkGeral)
+    networkGraphGeral <- qgraph(networkMatrixGeral, directed = FALSE, layout = "minimal", 
+                           graph = "glasso", sampleSize = 300, groups = grupos, labels = FALSE)
     networkGraphGeral # grafo de rede
 
  # Valores das relações dos itens
@@ -74,4 +79,4 @@
 
     nodeCentralityGeral <- centralityGeral$node.centrality
     edgeGeral <- centralityGeral$edge.betweenness.centrality
-    centralityPlot(networkGraphGeral, labels = colnames(networkGeral))
+    centralityPlot(nodeCentralityGeral, labels = colnames(networkGeral))
