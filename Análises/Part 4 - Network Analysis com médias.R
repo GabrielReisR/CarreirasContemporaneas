@@ -17,7 +17,7 @@
  #   + EEC
 
  # lendo banco específico
-    networkGeral <- read.csv("carreira fatoriais.csv", sep = ",")
+    networkGeral <- read.csv("https://raw.githubusercontent.com/GabrielReisR/CarreirasContemporaneas/master/Bancos/carreira%20fatoriais.csv", sep = ",")
     networkGeral <- networkGeral %>% 
         select(AEO_total, ACSF_total, ACP_total,
                PPC_AUTEN, PPC_BALAN, PPC_CRESC, EEC_total)
@@ -34,7 +34,8 @@
                   "Crescimento" = c(6), "Engajamento na Carreira" = c(7))
 
     networkGraphGeral <- qgraph(networkMatrixGeral, directed = FALSE, layout = "spring", 
-                           graph = "glasso", sampleSize = 300, groups = grupos, 
+                           graph = "glasso", sampleSize = 300, groups = grupos,
+                           palette = "colorblind",
                            labels = c("AEO", "CSF", "CP", "Auten", "Balan", "Cresc", "Engaj"))
     networkGraphGeral # grafo de rede
 
@@ -45,8 +46,5 @@
     plotMagnitudesGeral <- cor.plot(networkMagnitudesGeral, numbers = TRUE)
  
  # Medidas de centralidade
-    centralityGeral <- centrality_auto(networkGraphGeral)
-
-    nodeCentralityGeral <- centralityGeral$node.centrality
-    edgeGeral <- centralityGeral$edge.betweenness.centrality
-    centralityPlot(networkGraphGeral, labels = colnames(networkGeral))
+    centralityPlot(networkGraphGeral, include = "All",
+                   orderBy = "ExpectedInfluence")
