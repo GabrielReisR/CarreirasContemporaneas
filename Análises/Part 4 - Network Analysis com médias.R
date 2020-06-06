@@ -46,5 +46,5 @@
     plotMagnitudesGeral <- cor.plot(networkMagnitudesGeral, numbers = TRUE)
  
  # Medidas de centralidade
-    centralityPlot(networkGraphGeral, include = "All",
-                   orderBy = "ExpectedInfluence")
+    centralityPlot(networkGraphGeral, include = c("Strength", "Closeness", "Betweenness"),
+               orderBy = "Strength")
