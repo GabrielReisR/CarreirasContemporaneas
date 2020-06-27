@@ -64,19 +64,22 @@
                   "Carreira Proteana" = c(3), "Autenticidade" = c(4), "Balanço" = c(5),
                   "Crescimento" = c(6), "Engajamento na Carreira" = c(7))
    names(networkGeral)
-    networkGraphGeral <- qgraph(networkMatrixGeral, directed = FALSE, layout = "minimal", 
-                           graph = "glasso", sampleSize = 300, groups = grupos, labels = FALSE)
-    networkGraphGeral # grafo de rede
+   networkGraphGeral <- qgraph(networkMatrixGeral, directed = FALSE, 
+                                layout = "minimal", graph = "glasso", 
+                                sampleSize = 300, groups = grupos, 
+                                labels = FALSE)
+   networkGraphGeral # grafo de rede
 
  # Valores das relações dos itens
     networkMagnitudesGeral <- getWmat(networkGraphGeral)
     networkMagnitudesGeral
     # Tabela das correlações dos itens
-    plotMagnitudesGeral <- cor.plot(networkMagnitudesGeral, numbers = TRUE)
+    plotMagnitudesGeral <- cor.plot(networkMagnitudesGeral, 
+                                    numbers = TRUE)
  
  # Medidas de centralidade
-    centralityGeral <- centrality_auto(networkGraphGeral)
-
-    nodeCentralityGeral <- centralityGeral$node.centrality
-    edgeGeral <- centralityGeral$edge.betweenness.centrality
-    centralityPlot(nodeCentralityGeral, labels = colnames(networkGeral))
+    centralityPlot <- centralityPlot(networkGraphGeral, 
+                                     include = c("Strength", 
+                                                 "Closeness", 
+                                                 "Betweenness"), 
+                                     orderBy = "Strength")
