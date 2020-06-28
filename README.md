@@ -1,6 +1,6 @@
 # Carreiras Comtemporâneas
 
-## Como as carreiras contemporâneas se relacionam com a autoeficácia e o engajamento na carreira?
+## Como as carreiras contemporâneas se relacionam com a autoeficácia e o engajamento na carreira? 
 Temos aqui um banco com diversas variáveis, cada uma delas representando características específicas que as pessoas apresentam relacionadas a suas carreiras.
 
  7 variáveis principais desse estudo:
